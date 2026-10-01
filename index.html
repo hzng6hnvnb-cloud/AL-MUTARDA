@@ -1,1059 +1,268 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>المطاردة</title>
-
-<style>
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    -webkit-tap-highlight-color:transparent;
-}
-
-body{
-    background:#07090d;
-    color:white;
-    font-family:Arial,Tahoma,sans-serif;
-    overflow:hidden;
-    user-select:none;
-}
-
-button{
-    font-family:inherit;
-}
-
-/* =========================
-   البداية
-========================= */
-
-#intro{
-    position:fixed;
-    inset:0;
-    z-index:100;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:
-        radial-gradient(circle at 50% 40%,rgba(190,30,30,.18),transparent 35%),
-        linear-gradient(135deg,#08090d,#0c0e13 55%,#050609);
-    transition:.8s;
-}
-
-.intro-box{
-    text-align:center;
-    animation:introIn 1.2s ease;
-}
-
-.logo{
-    width:92px;
-    height:92px;
-    margin:auto;
-    border:2px solid #e83a3a;
-    border-radius:26px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:43px;
-    box-shadow:0 0 50px rgba(232,58,58,.3);
-}
-
-.intro-box h1{
-    margin-top:25px;
-    font-size:58px;
-    letter-spacing:3px;
-}
-
-.intro-box p{
-    margin-top:10px;
-    color:#9da2ad;
-    font-size:16px;
-}
-
-.start-btn{
-    margin-top:38px;
-    border:1px solid #ff4141;
-    background:linear-gradient(135deg,#e82e35,#9e171d);
-    color:white;
-    padding:17px 65px;
-    border-radius:14px;
-    font-size:19px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:0 10px 35px rgba(200,30,30,.3);
-}
-
-@keyframes introIn{
-    from{opacity:0;transform:translateY(25px) scale(.96)}
-    to{opacity:1;transform:none}
-}
-
-/* =========================
-   اختيار الصعوبة
-========================= */
-
-#difficulty{
-    position:fixed;
-    inset:0;
-    z-index:90;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    background:
-        radial-gradient(circle at 50% 30%,rgba(255,45,45,.12),transparent 40%),
-        #07090d;
-}
-
-.diff-box{
-    width:min(850px,92%);
-    text-align:center;
-}
-
-.diff-box h2{
-    font-size:38px;
-    margin-bottom:10px;
-}
-
-.diff-box p{
-    color:#8f95a0;
-    margin-bottom:30px;
-}
-
-.diff-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:14px;
-}
-
-.diff{
-    border:1px solid #242832;
-    background:#10131a;
-    color:white;
-    padding:25px 10px;
-    border-radius:18px;
-    cursor:pointer;
-    transition:.25s;
-}
-
-.diff:hover{
-    transform:translateY(-5px);
-    border-color:#e43b42;
-    background:#161922;
-}
-
-.diff .icon{
-    font-size:34px;
-    margin-bottom:12px;
-}
-
-.diff strong{
-    display:block;
-    font-size:18px;
-}
-
-.diff span{
-    display:block;
-    color:#858b97;
-    font-size:12px;
-    margin-top:8px;
-}
-
-/* =========================
-   اللعبة
-========================= */
-
-#game{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:#080a0f;
-}
-
-/* الوقت */
-
-#timer{
-    position:fixed;
-    top:18px;
-    left:50%;
-    transform:translateX(-50%);
-    z-index:30;
-    min-width:120px;
-    text-align:center;
-    background:rgba(8,10,15,.92);
-    border:1px solid #343945;
-    border-radius:14px;
-    padding:10px 22px;
-    font-size:27px;
-    font-weight:bold;
-    letter-spacing:2px;
-    box-shadow:0 8px 30px rgba(0,0,0,.4);
-}
-
-#timer.warning{
-    color:#ff4141;
-    border-color:#ff4141;
-    animation:timerPulse .7s infinite alternate;
-}
-
-@keyframes timerPulse{
-    from{box-shadow:0 0 8px rgba(255,50,50,.15)}
-    to{box-shadow:0 0 30px rgba(255,50,50,.5)}
-}
-
-/* معلومات المهام */
-
-#taskPanel{
-    position:fixed;
-    top:18px;
-    right:18px;
-    z-index:30;
-    width:235px;
-    background:rgba(9,11,16,.94);
-    border:1px solid #292e38;
-    border-radius:16px;
-    padding:16px;
-}
-
-#taskPanel h3{
-    font-size:16px;
-    margin-bottom:12px;
-}
-
-.task{
-    display:flex;
-    align-items:center;
-    gap:9px;
-    padding:8px 0;
-    color:#9ba1ad;
-    font-size:13px;
-}
-
-.task.done{
-    color:#55df92;
-}
-
-.task-dot{
-    width:9px;
-    height:9px;
-    border-radius:50%;
-    background:#555b66;
-}
-
-.task.done .task-dot{
-    background:#55df92;
-    box-shadow:0 0 10px #55df92;
-}
-
-/* مستوى الروبوت */
-
-#difficultyLabel{
-    position:fixed;
-    top:18px;
-    left:18px;
-    z-index:30;
-    background:rgba(9,11,16,.94);
-    border:1px solid #292e38;
-    padding:11px 15px;
-    border-radius:13px;
-    color:#aeb4bf;
-    font-size:12px;
-}
-
-/* الخريطة */
-
-#world{
-    position:absolute;
-    width:1400px;
-    height:850px;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-    background:
-        linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px),
-        #11151b;
-    background-size:40px 40px;
-    border:1px solid #252a33;
-    overflow:hidden;
-}
-
-/* غرف */
-
-.room{
-    position:absolute;
-    background:#171c23;
-    border:2px solid #303742;
-    border-radius:12px;
-    box-shadow:inset 0 0 30px rgba(0,0,0,.25);
-}
-
-.room span{
-    position:absolute;
-    top:10px;
-    right:12px;
-    color:#505764;
-    font-size:11px;
-}
-
-/* جدران */
-
-.wall{
-    position:absolute;
-    background:#303640;
-    border-radius:5px;
-}
-
-/* مناطق المهام */
-
-.task-location{
-    position:absolute;
-    width:68px;
-    height:68px;
-    border-radius:17px;
-    border:2px solid #e9a52c;
-    background:rgba(233,165,44,.1);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:28px;
-    box-shadow:0 0 25px rgba(233,165,44,.12);
-}
-
-.task-location.active{
-    animation:taskGlow 1s infinite alternate;
-}
-
-@keyframes taskGlow{
-    from{box-shadow:0 0 8px rgba(233,165,44,.15)}
-    to{box-shadow:0 0 28px rgba(233,165,44,.55)}
-}
-
-/* بوابة */
-
-#escape{
-    position:absolute;
-    width:90px;
-    height:125px;
-    right:45px;
-    top:360px;
-    border:3px solid #3b424e;
-    background:#161a20;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:7px;
-    color:#555c67;
-    font-size:13px;
-}
-
-#escape.open{
-    border-color:#3ee38c;
-    color:#3ee38c;
-    box-shadow:0 0 35px rgba(62,227,140,.35);
-}
-
-/* الشخصيات */
-
-.player,
-.bot{
-    position:absolute;
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    z-index:15;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:21px;
-}
-
-.player{
-    background:#3e8cff;
-    border:3px solid #9fc7ff;
-    box-shadow:0 0 22px rgba(62,140,255,.65);
-}
-
-.bot{
-    background:#df3038;
-    border:3px solid #ff9a9f;
-    box-shadow:0 0 25px rgba(223,48,56,.6);
-}
-
-.name-tag{
-    position:absolute;
-    top:-25px;
-    white-space:nowrap;
-    font-size:10px;
-    color:#c8cdd5;
-}
-
-/* رسالة المهمة */
-
-#interaction{
-    position:fixed;
-    left:50%;
-    bottom:100px;
-    transform:translateX(-50%);
-    z-index:40;
-    background:rgba(7,9,13,.95);
-    border:1px solid #3a414d;
-    padding:14px 22px;
-    border-radius:14px;
-    display:none;
-    text-align:center;
-}
-
-#interaction button{
-    margin-top:10px;
-    background:#e7a12b;
-    border:0;
-    padding:9px 20px;
-    border-radius:9px;
-    font-weight:bold;
-    cursor:pointer;
-}
-
-/* تحكم الجوال */
-
-#controls{
-    position:fixed;
-    left:20px;
-    bottom:20px;
-    z-index:50;
-    width:150px;
-    height:150px;
-}
-
-.control{
-    position:absolute;
-    width:52px;
-    height:52px;
-    border-radius:15px;
-    border:1px solid #3a414d;
-    background:rgba(15,18,24,.9);
-    color:white;
-    font-size:20px;
-}
-
-#up{top:0;left:49px}
-#left{top:49px;left:0}
-#down{bottom:0;left:49px}
-#right{top:49px;right:0}
-
-/* شاشة النهاية */
-
-#result{
-    display:none;
-    position:fixed;
-    inset:0;
-    z-index:100;
-    align-items:center;
-    justify-content:center;
-    background:rgba(3,4,7,.94);
-}
-
-.result-box{
-    text-align:center;
-    padding:40px;
-}
-
-.result-icon{
-    font-size:70px;
-}
-
-.result-box h2{
-    font-size:45px;
-    margin:15px 0 8px;
-}
-
-.result-box p{
-    color:#9298a4;
-}
-
-.result-box button{
-    margin-top:28px;
-    padding:13px 35px;
-    border:1px solid #e43b42;
-    background:#a51d24;
-    color:white;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:16px;
-}
-
-/* زر الخروج */
-
-#quit{
-    position:fixed;
-    right:18px;
-    bottom:18px;
-    z-index:40;
-    background:#161a20;
-    border:1px solid #303640;
-    color:#aaa;
-    padding:10px 15px;
-    border-radius:10px;
-}
-
-/* جوال */
-
-@media(max-width:700px){
-
-    .intro-box h1{
-        font-size:45px;
-    }
-
-    .diff-grid{
-        grid-template-columns:repeat(2,1fr);
-    }
-
-    #taskPanel{
-        top:72px;
-        right:10px;
-        width:190px;
-        padding:11px;
-    }
-
-    #difficultyLabel{
-        top:18px;
-        left:10px;
-        font-size:10px;
-    }
-
-    #timer{
-        top:15px;
-        font-size:23px;
-        min-width:105px;
-    }
-
-    #world{
-        width:1100px;
-        height:700px;
-    }
-
-    #controls{
-        transform:scale(.85);
-        transform-origin:bottom left;
-        bottom:10px;
-        left:10px;
-    }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>المطاردة</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- البداية -->
+<!-- شاشة البداية -->
+<section id="introScreen" class="screen">
+    <div class="introGlow"></div>
 
-<section id="intro">
-    <div class="intro-box">
-        <div class="logo">◈</div>
+    <div class="introContent">
+        <div class="gameLogo">◈</div>
+
+        <div class="smallTitle">لعبة البقاء</div>
+
         <h1>المطاردة</h1>
-        <p>اهرب قبل أن يجدك.</p>
-        <button class="start-btn" onclick="showDifficulty()">دخول اللعبة</button>
+
+        <div class="line"></div>
+
+        <p>اهرب قبل أن يجدك</p>
+
+        <button class="mainButton" onclick="showDifficulty()">
+            دخول اللعبة
+        </button>
     </div>
 </section>
 
-<!-- اختيار الصعوبة -->
 
-<section id="difficulty">
-    <div class="diff-box">
-        <h2>اختر مستوى المطارد</h2>
-        <p>كلما ارتفع المستوى أصبح الروبوت أسرع وأقرب لك</p>
+<!-- اختيار مستوى الصعوبة -->
+<section id="difficultyScreen" class="screen hidden">
 
-        <div class="diff-grid">
+    <div class="difficultyBox">
 
-            <button class="diff" onclick="startGame('سهل')">
-                <div class="icon">🟢</div>
-                <strong>سهل</strong>
-                <span>بطيء في المطاردة</span>
+        <div class="smallTitle">المطارد</div>
+
+        <h2>اختر مستوى الصعوبة</h2>
+
+        <p class="description">
+            كلما ارتفع المستوى أصبح المطارد أسرع وأقرب لك
+        </p>
+
+        <div class="difficultyGrid">
+
+            <button class="difficultyCard" onclick="startGame('easy')">
+                <div class="difficultyIcon easy">●</div>
+                <h3>سهل</h3>
+                <span>مطارد بطيء</span>
             </button>
 
-            <button class="diff" onclick="startGame('متوسط')">
-                <div class="icon">🟡</div>
-                <strong>متوسط</strong>
+            <button class="difficultyCard" onclick="startGame('medium')">
+                <div class="difficultyIcon medium">●</div>
+                <h3>متوسط</h3>
                 <span>سرعة متوازنة</span>
             </button>
 
-            <button class="diff" onclick="startGame('صعب')">
-                <div class="icon">🟠</div>
-                <strong>صعب</strong>
-                <span>سريع ويلاحقك</span>
+            <button class="difficultyCard" onclick="startGame('hard')">
+                <div class="difficultyIcon hard">●</div>
+                <h3>صعب</h3>
+                <span>مطارد سريع</span>
             </button>
 
-            <button class="diff" onclick="startGame('مستحيل')">
-                <div class="icon">🔴</div>
-                <strong>مستحيل</strong>
+            <button class="difficultyCard" onclick="startGame('impossible')">
+                <div class="difficultyIcon impossible">●</div>
+                <h3>مستحيل</h3>
                 <span>أقصى سرعة</span>
             </button>
 
         </div>
+
     </div>
+
 </section>
 
+
 <!-- اللعبة -->
+<section id="gameScreen" class="hidden">
 
-<section id="game">
-
-    <div id="timer">02:00</div>
-
-    <div id="difficultyLabel">
-        المطارد: <b id="diffText">سهل</b>
+    <!-- المؤقت -->
+    <div id="timer">
+        02:00
     </div>
 
-    <div id="taskPanel">
-        <h3>المهام <span id="taskCount">0 / 4</span></h3>
 
-        <div class="task" id="task0">
-            <div class="task-dot"></div>
+    <!-- معلومات الصعوبة -->
+    <div id="difficultyLabel">
+        المطارد:
+        <strong id="difficultyText">سهل</strong>
+    </div>
+
+
+    <!-- قائمة المهام -->
+    <div id="taskPanel">
+
+        <div class="taskHeader">
+            <span>المهام</span>
+            <strong id="taskCounter">0 / 4</strong>
+        </div>
+
+        <div class="taskItem" id="task0">
+            <span class="taskCheck">○</span>
             إصلاح المولد
         </div>
 
-        <div class="task" id="task1">
-            <div class="task-dot"></div>
+        <div class="taskItem" id="task1">
+            <span class="taskCheck">○</span>
             تشغيل الكهرباء
         </div>
 
-        <div class="task" id="task2">
-            <div class="task-dot"></div>
+        <div class="taskItem" id="task2">
+            <span class="taskCheck">○</span>
             جمع بطاقة الخروج
         </div>
 
-        <div class="task" id="task3">
-            <div class="task-dot"></div>
+        <div class="taskItem" id="task3">
+            <span class="taskCheck">○</span>
             فتح بوابة الهروب
         </div>
+
     </div>
 
+
+    <!-- العالم -->
     <div id="world">
 
         <!-- الغرف -->
-
-        <div class="room" style="left:40px;top:40px;width:330px;height:250px">
+        <div class="room room1">
             <span>المخزن</span>
         </div>
 
-        <div class="room" style="left:430px;top:40px;width:420px;height:250px">
+        <div class="room room2">
             <span>الممر الرئيسي</span>
         </div>
 
-        <div class="room" style="left:910px;top:40px;width:350px;height:250px">
+        <div class="room room3">
             <span>غرفة المولد</span>
         </div>
 
-        <div class="room" style="left:40px;top:350px;width:330px;height:330px">
+        <div class="room room4">
             <span>المكتب</span>
         </div>
 
-        <div class="room" style="left:430px;top:350px;width:420px;height:330px">
+        <div class="room room5">
             <span>الساحة</span>
         </div>
 
-        <div class="room" style="left:910px;top:350px;width:350px;height:330px">
+        <div class="room room6">
             <span>بوابة الخروج</span>
         </div>
 
-        <!-- جدران -->
 
-        <div class="wall" style="left:390px;top:40px;width:22px;height:640px"></div>
-        <div class="wall" style="left:870px;top:40px;width:22px;height:640px"></div>
-        <div class="wall" style="left:40px;top:315px;width:1220px;height:22px"></div>
+        <!-- الجدران -->
+        <div class="wall wallVertical1"></div>
+        <div class="wall wallVertical2"></div>
+        <div class="wall wallHorizontal"></div>
+
 
         <!-- المهام -->
-
-        <div class="task-location active"
-             id="loc0"
-             style="left:1010px;top:110px"
-             onclick="tryTask(0)">🔧</div>
-
-        <div class="task-location active"
-             id="loc1"
-             style="left:540px;top:440px"
-             onclick="tryTask(1)">⚡</div>
-
-        <div class="task-location active"
-             id="loc2"
-             style="left:180px;top:450px"
-             onclick="tryTask(2)">💳</div>
-
-        <div class="task-location active"
-             id="loc3"
-             style="left:1080px;top:490px"
-             onclick="tryTask(3)">🚪</div>
-
-        <!-- بوابة -->
-
-        <div id="escape">
-            <div style="font-size:28px">🚪</div>
-            <b>الهروب</b>
+        <div class="taskLocation" id="taskLocation0">
+            🔧
         </div>
+
+        <div class="taskLocation" id="taskLocation1">
+            ⚡
+        </div>
+
+        <div class="taskLocation" id="taskLocation2">
+            💳
+        </div>
+
+        <div class="taskLocation" id="taskLocation3">
+            🚪
+        </div>
+
+
+        <!-- بوابة الهروب -->
+        <div id="escapeGate">
+            <div class="gateIcon">🚪</div>
+            <span>بوابة الهروب</span>
+        </div>
+
 
         <!-- اللاعب -->
-
-        <div class="player" id="player" style="left:470px;top:440px">
+        <div id="player" class="character player">
             🔵
-            <div class="name-tag">أنت</div>
+            <span class="characterName">أنت</span>
         </div>
+
 
         <!-- الروبوت -->
-
-        <div class="bot" id="bot" style="left:1050px;top:500px">
+        <div id="bot" class="character bot">
             🔴
-            <div class="name-tag">المطارد</div>
+            <span class="characterName">المطارد</span>
         </div>
 
     </div>
 
-    <div id="interaction">
-        <div id="interactionText">أنت قريب من مهمة</div>
-        <button onclick="doCurrentTask()">تنفيذ المهمة</button>
+
+    <!-- نافذة تنفيذ المهمة -->
+    <div id="interactionBox">
+
+        <div id="interactionText">
+            أنت قريب من مهمة
+        </div>
+
+        <button onclick="completeCurrentTask()">
+            تنفيذ المهمة
+        </button>
+
     </div>
+
 
     <!-- تحكم الجوال -->
+    <div id="mobileControls">
 
-    <div id="controls">
-        <button class="control" id="up">▲</button>
-        <button class="control" id="left">◀</button>
-        <button class="control" id="down">▼</button>
-        <button class="control" id="right">▶</button>
+        <button id="upButton">▲</button>
+
+        <button id="leftButton">◀</button>
+
+        <button id="downButton">▼</button>
+
+        <button id="rightButton">▶</button>
+
     </div>
 
-    <button id="quit" onclick="location.reload()">خروج</button>
+
+    <!-- زر الخروج -->
+    <button id="exitButton" onclick="exitGame()">
+        خروج
+    </button>
 
 </section>
 
-<!-- النتيجة -->
 
-<section id="result">
-    <div class="result-box">
-        <div class="result-icon" id="resultIcon">🏆</div>
-        <h2 id="resultTitle">نجحت!</h2>
-        <p id="resultText">أنجزت جميع المهام وهربت.</p>
-        <button onclick="location.reload()">العب مرة ثانية</button>
+<!-- شاشة النتيجة -->
+<section id="resultScreen" class="screen hidden">
+
+    <div class="resultBox">
+
+        <div id="resultIcon">
+            🏆
+        </div>
+
+        <h2 id="resultTitle">
+            نجحت!
+        </h2>
+
+        <p id="resultMessage">
+            أنهيت جميع المهام وهربت.
+        </p>
+
+        <button class="mainButton" onclick="location.reload()">
+            لعب مرة ثانية
+        </button>
+
     </div>
+
 </section>
 
-<script>
 
-/* =========================
-   المتغيرات
-========================= */
+<script src="app.js"></script>
 
-const player = document.getElementById("player");
-const bot = document.getElementById("bot");
-const world = document.getElementById("world");
-
-let px = 470;
-let py = 440;
-
-let bx = 1050;
-let by = 500;
-
-let timer = 120;
-let gameRunning = false;
-let currentTask = -1;
-
-let completed = [false,false,false,false];
-
-let keys = {
-    up:false,
-    down:false,
-    left:false,
-    right:false
-};
-
-let difficulty = "سهل";
-
-const difficultySpeed = {
-    "سهل":1.15,
-    "متوسط":1.55,
-    "صعب":2.05,
-    "مستحيل":2.7
-};
-
-/* =========================
-   البداية
-========================= */
-
-function showDifficulty(){
-
-    document.getElementById("intro").style.display="none";
-    document.getElementById("difficulty").style.display="flex";
-
-}
-
-/* =========================
-   بدء اللعبة
-========================= */
-
-function startGame(level){
-
-    difficulty = level;
-
-    document.getElementById("difficulty").style.display="none";
-    document.getElementById("game").style.display="block";
-
-    document.getElementById("diffText").textContent = level;
-
-    gameRunning = true;
-
-    resetGame();
-
-    requestAnimationFrame(gameLoop);
-
-    setInterval(updateTimer,1000);
-
-}
-
-/* =========================
-   إعادة اللعبة
-========================= */
-
-function resetGame(){
-
-    px=470;
-    py=440;
-
-    bx=1050;
-    by=500;
-
-    timer=120;
-
-    completed=[false,false,false,false];
-
-    for(let i=0;i<4;i++){
-
-        document.getElementById("task"+i).classList.remove("done");
-        document.getElementById("loc"+i).classList.add("active");
-
-    }
-
-    document.getElementById("taskCount").textContent="0 / 4";
-
-    document.getElementById("escape").classList.remove("open");
-
-    updatePositions();
-
-}
-
-/* =========================
-   لوحة المفاتيح
-========================= */
-
-document.addEventListener("keydown",e=>{
-
-    if(e.key==="ArrowUp" || e.key.toLowerCase()==="w")
-        keys.up=true;
-
-    if(e.key==="ArrowDown" || e.key.toLowerCase()==="s")
-        keys.down=true;
-
-    if(e.key==="ArrowLeft" || e.key.toLowerCase()==="a")
-        keys.left=true;
-
-    if(e.key==="ArrowRight" || e.key.toLowerCase()==="d")
-        keys.right=true;
-
-});
-
-document.addEventListener("keyup",e=>{
-
-    if(e.key==="ArrowUp" || e.key.toLowerCase()==="w")
-        keys.up=false;
-
-    if(e.key==="ArrowDown" || e.key.toLowerCase()==="s")
-        keys.down=false;
-
-    if(e.key==="ArrowLeft" || e.key.toLowerCase()==="a")
-        keys.left=false;
-
-    if(e.key==="ArrowRight" || e.key.toLowerCase()==="d")
-        keys.right=false;
-
-});
-
-/* =========================
-   أزرار الجوال
-========================= */
-
-function holdButton(id,key){
-
-    const button=document.getElementById(id);
-
-    button.addEventListener("touchstart",e=>{
-        e.preventDefault();
-        keys[key]=true;
-    });
-
-    button.addEventListener("touchend",e=>{
-        e.preventDefault();
-        keys[key]=false;
-    });
-
-    button.addEventListener("mousedown",()=>{
-        keys[key]=true;
-    });
-
-    button.addEventListener("mouseup",()=>{
-        keys[key]=false;
-    });
-
-    button.addEventListener("mouseleave",()=>{
-        keys[key]=false;
-    });
-}
-
-holdButton("up","up");
-holdButton("down","down");
-holdButton("left","left");
-holdButton("right","right");
-
-/* =========================
-   الحركة
-========================= */
-
-function movePlayer(){
-
-    if(!gameRunning) return;
-
-    let speed=4;
-
-    if(keys.up) py-=speed;
-    if(keys.down) py+=speed;
-    if(keys.left) px-=speed;
-    if(keys.right) px+=speed;
-
-    /* حدود العالم */
-
-    px=Math.max(10,Math.min(1348,px));
-    py=Math.max(10,Math.min(798,py));
-
-    updatePositions();
-
-    checkNearbyTasks();
-
-}
-
-/* =========================
-   تحريك الروبوت
-========================= */
-
-function moveBot(){
-
-    if(!gameRunning) return;
-
-    const speed=difficultySpeed[difficulty];
-
-    const dx=px-bx;
-    const dy=py-by;
-
-    const distance=Math.sqrt(dx*dx+dy*dy);
-
-    /* الروبوت يبدأ المطاردة */
-
-    if(distance<650){
-
-        if(Math.abs(dx)>4)
-            bx += Math.sign(dx)*speed;
-
-        if(Math.abs(dy)>4)
-            by += Math.sign(dy)*speed;
-
-    }
-
-    bx=Math.max(10,Math.min(1348,bx));
-    by=Math.max(10,Math.min(798,by));
-
-    updatePositions();
-
-    /* إذا اقترب جدًا */
-
-    if(distance<42){
-
-        loseGame("المطارد أمسك بك قبل أن تنهي مهامك.");
-
-    }
-
-}
-
-/* =========================
-   تحديث المواقع
-========================= */
-
-function updatePositions(){
-
-    player.style.left=px+"px";
-    player.style.top=py+"px";
-
-    bot.style.left=bx+"px";
-    bot.style.top=by+"px";
-
-}
-
-/* =========================
-   اكتشاف المهام القريبة
-========================= */
-
-function checkNearbyTasks(){
-
-    currentTask=-1;
-
-    for(let i=0;i<4;i++){
-
-        if(completed[i]) continue;
-
-        const location=document.getElementById("loc"+i);
-
-        const lx=location.offsetLeft+34;
-        const ly=location.offsetTop+34;
-
-        const dx=px-lx;
-        const dy=py-ly;
-
-        const distance=Math.sqrt(dx*dx+dy*dy);
-
-        if(distance<85){
-
-            currentTask=i;
-
-            document.getElementById("interaction").style.display="block";
-
-            const names=[
-                "إصلاح المولد",
-                "تشغيل الكهرباء",
-                "جمع بطاقة الخروج",
-                "فتح بوابة الهروب"
-            ];
-
-            document.getElementById("interactionText").textContent=
-                "أنت قريب من: "+names[i];
-
-            return;
-
-        }
-
-    }
-
-    document.getElementById("interaction").style.display="none";
-
-}
-
-/* =========================
-   تنفيذ المهمة
-========================= */
-
-function tryTask(index){
-
-    if(completed[index]) return;
-
-    const location=document.getElementById("loc"+index);
-
-    const lx=location.offsetLeft+34;
-    const ly=location.offsetTop+34;
-
-    const dx=px-lx;
-    const dy=py-
+</body>
+</html>
