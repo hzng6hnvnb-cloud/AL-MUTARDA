@@ -3,13 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>المطاردة | AL-MUTARDAH</title>
-
+    <title>المطاردة</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<div class="intro-screen" id="introScreen">
+
+    <div class="intro-noise"></div>
+    <div class="intro-glow"></div>
+
+    <div class="intro-content">
+
+        <div class="intro-mark">◈</div>
+
+        <div class="intro-mini">
+            لعبة المطاردة الجماعية
+        </div>
+
+        <h1>المطاردة</h1>
+
+        <div class="intro-line"></div>
+
+        <p>
+            اهرب قبل أن يجدك.
+        </p>
+
+        <button class="enter-btn" onclick="enterGame()">
+            <span>دخول اللعبة</span>
+            <small>اضغط للمتابعة</small>
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="mode-screen" id="modeScreen">
 
     <div class="background">
         <div class="fog fog1"></div>
@@ -17,272 +48,552 @@
         <div class="grid"></div>
     </div>
 
-    <main class="app">
+    <header class="topbar">
 
-        <header class="topbar">
-            <div class="logo-small">
-                <span class="logo-icon">◈</span>
-                <span>المطاردة</span>
+        <div class="logo-small">
+            <span class="logo-icon">◈</span>
+            <span>المطاردة</span>
+        </div>
+
+        <div class="online">
+            <span class="online-dot"></span>
+            النظام جاهز
+        </div>
+
+    </header>
+
+
+    <main class="mode-content">
+
+        <div class="mode-title">
+
+            <div class="eyebrow">
+                اختر طريقة اللعب
             </div>
 
-            <div class="online">
-                <span class="online-dot"></span>
-                متصل الآن
-            </div>
-        </header>
+            <h2>
+                كيف تريد<br>
+                <span>اللعب؟</span>
+            </h2>
+
+            <p>
+                اختر نمطك وابدأ المطاردة.
+            </p>
+
+        </div>
 
 
-        <section class="hero">
+        <div class="mode-cards">
 
-            <div class="hero-text">
+            <button class="mode-card single" onclick="selectMode('single')">
 
-                <div class="eyebrow">
-                    لعبة مطاردة جماعية
+                <div class="card-number">01</div>
+
+                <div class="card-icon">
+                    ◉
                 </div>
 
-                <h1>
-                    لا تثق<br>
-                    <span>بأحد.</span>
-                </h1>
+                <div class="card-text">
 
-                <p>
-                    ادخل الغرفة، اجمع فريقك، وابدأ المطاردة.
-                    اهرب قبل أن يجدك المطارد.
-                </p>
+                    <h3>لعب فردي</h3>
 
-                <div class="actions">
-
-                    <button class="main-btn" onclick="openCreate()">
-                        <span>إنشاء غرفة</span>
-                        <small>ابدأ لعبة جديدة</small>
-                    </button>
-
-                    <button class="secondary-btn" onclick="openJoin()">
-                        دخول غرفة
-                    </button>
-
-                </div>
-
-            </div>
-
-
-            <div class="hero-scene">
-
-                <div class="scene-glow"></div>
-
-                <div class="map-card">
-
-                    <div class="map-top">
-                        <span>الخريطة</span>
-                        <span class="live">LIVE</span>
-                    </div>
-
-                    <div class="map">
-
-                        <div class="road road1"></div>
-                        <div class="road road2"></div>
-                        <div class="road road3"></div>
-
-                        <div class="building b1"></div>
-                        <div class="building b2"></div>
-                        <div class="building b3"></div>
-                        <div class="building b4"></div>
-
-                        <div class="player p1">●</div>
-                        <div class="player p2">●</div>
-                        <div class="player p3">●</div>
-
-                        <div class="hunter">
-                            <div class="hunter-ring"></div>
-                            ◆
-                        </div>
-
-                    </div>
-
-                    <div class="map-bottom">
-                        <span>👥 8 لاعبين</span>
-                        <span>⚡ الجولة قادمة</span>
-                    </div>
+                    <p>
+                        ادخل الخريطة وحدك
+                        وواجه المطارد الروبوت.
+                    </p>
 
                 </div>
 
-            </div>
-
-        </section>
-
-
-        <section class="features">
-
-            <div class="feature">
-                <div class="feature-icon">👥</div>
-                <div>
-                    <strong>2 - 8 لاعبين</strong>
-                    <span>كوّن فريقك</span>
+                <div class="card-arrow">
+                    ←
                 </div>
-            </div>
 
-            <div class="feature">
-                <div class="feature-icon">🎯</div>
-                <div>
-                    <strong>مطارد واحد</strong>
-                    <span>والبقية يحاولون الهروب</span>
+            </button>
+
+
+            <button class="mode-card multi" onclick="selectMode('multi')">
+
+                <div class="card-number">02</div>
+
+                <div class="card-icon">
+                    ◎
                 </div>
-            </div>
 
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <div>
-                    <strong>جولات سريعة</strong>
-                    <span>كل جولة مختلفة</span>
+                <div class="card-text">
+
+                    <h3>لعب جماعي</h3>
+
+                    <p>
+                        اجمع اللاعبين
+                        وواجه الروبوت في الجولة.
+                    </p>
+
                 </div>
-            </div>
 
-        </section>
+                <div class="card-arrow">
+                    ←
+                </div>
+
+            </button>
+
+        </div>
 
     </main>
 
+</div>
 
-    <!-- نافذة إنشاء الغرفة -->
 
-    <div class="modal" id="createModal">
+<div class="app" id="mainApp">
 
-        <div class="modal-box">
+    <div class="background">
 
-            <button class="close" onclick="closeModals()">×</button>
-
-            <div class="modal-icon">◈</div>
-
-            <h2>إنشاء غرفة</h2>
-
-            <p>اكتب اسمك وخلنا نبدأ.</p>
-
-            <input
-                id="createName"
-                type="text"
-                maxlength="16"
-                placeholder="اسم اللاعب"
-            >
-
-            <button class="modal-btn" onclick="createRoom()">
-                إنشاء الغرفة
-            </button>
-
-        </div>
+        <div class="fog fog1"></div>
+        <div class="fog fog2"></div>
+        <div class="grid"></div>
 
     </div>
 
 
-    <!-- نافذة دخول الغرفة -->
+    <header class="topbar">
 
-    <div class="modal" id="joinModal">
-
-        <div class="modal-box">
-
-            <button class="close" onclick="closeModals()">×</button>
-
-            <div class="modal-icon">↗</div>
-
-            <h2>دخول غرفة</h2>
-
-            <p>أدخل كود الغرفة للانضمام.</p>
-
-            <input
-                id="joinName"
-                type="text"
-                maxlength="16"
-                placeholder="اسم اللاعب"
-            >
-
-            <input
-                id="roomCode"
-                type="text"
-                maxlength="6"
-                inputmode="numeric"
-                placeholder="كود الغرفة"
-            >
-
-            <button class="modal-btn" onclick="joinRoom()">
-                دخول الغرفة
-            </button>
-
+        <div class="logo-small">
+            <span class="logo-icon">◈</span>
+            <span>المطاردة</span>
         </div>
 
-    </div>
-
-
-    <!-- شاشة الغرفة -->
-
-    <div class="room-screen" id="roomScreen">
-
-        <div class="room-header">
-
-            <button class="back-btn" onclick="leaveRoom()">
-                ← خروج
-            </button>
-
-            <div class="room-title">
-                <span>كود الغرفة</span>
-                <strong id="displayCode">------</strong>
-            </div>
-
+        <div class="online">
+            <span class="online-dot"></span>
+            متصل الآن
         </div>
 
+    </header>
 
-        <div class="room-content">
 
-            <div class="room-intro">
+    <section class="hero">
 
-                <span class="eyebrow">غرفة الانتظار</span>
+        <div class="hero-text">
 
-                <h2>
-                    اجمع فريقك<br>
-                    <span>واستعد.</span>
-                </h2>
-
-                <p>
-                    أرسل كود الغرفة لأصدقائك.
-                </p>
-
+            <div class="eyebrow">
+                لعبة مطاردة جماعية
             </div>
 
+            <h1>
+                لا تثق<br>
+                <span>بأحد.</span>
+            </h1>
 
-            <div class="players-card">
+            <p>
+                ادخل الغرفة، اجمع فريقك، وابدأ المطاردة.
+                اهرب قبل أن يجدك المطارد.
+            </p>
 
-                <div class="players-head">
-                    <strong>اللاعبون</strong>
-                    <span id="playerCount">1 / 8</span>
-                </div>
+            <div class="actions">
 
-                <div class="players" id="playersList">
+                <button class="main-btn" onclick="openCreate()">
 
-                    <div class="player-row">
+                    <span>إنشاء غرفة</span>
 
-                        <div class="avatar">1</div>
+                    <small>
+                        ابدأ لعبة جديدة
+                    </small>
 
-                        <div class="player-name">
-                            <strong id="myName">أنت</strong>
-                            <span>قائد الغرفة</span>
-                        </div>
-
-                        <div class="host">HOST</div>
-
-                    </div>
-
-                </div>
+                </button>
 
 
-                <button class="start-btn" onclick="startGame()">
-                    ابدأ الجولة
+                <button class="secondary-btn" onclick="openJoin()">
+                    دخول غرفة
                 </button>
 
             </div>
 
         </div>
 
+
+        <div class="hero-scene">
+
+            <div class="scene-glow"></div>
+
+            <div class="map-card">
+
+                <div class="map-top">
+
+                    <span>الخريطة</span>
+
+                    <span class="live">
+                        LIVE
+                    </span>
+
+                </div>
+
+
+                <div class="map">
+
+                    <div class="road road1"></div>
+                    <div class="road road2"></div>
+                    <div class="road road3"></div>
+
+                    <div class="building b1"></div>
+                    <div class="building b2"></div>
+                    <div class="building b3"></div>
+                    <div class="building b4"></div>
+
+                    <div class="player p1">●</div>
+                    <div class="player p2">●</div>
+                    <div class="player p3">●</div>
+
+                    <div class="hunter">
+
+                        <div class="hunter-ring"></div>
+
+                        ◆
+
+                    </div>
+
+                </div>
+
+
+                <div class="map-bottom">
+
+                    <span>
+                        👥 8 لاعبين
+                    </span>
+
+                    <span>
+                        ⚡ الجولة قادمة
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="features">
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                👥
+            </div>
+
+            <div>
+
+                <strong>
+                    2 - 8 لاعبين
+                </strong>
+
+                <span>
+                    كوّن فريقك
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                🎯
+            </div>
+
+            <div>
+
+                <strong>
+                    مطارد واحد
+                </strong>
+
+                <span>
+                    والبقية يحاولون الهروب
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ⚡
+            </div>
+
+            <div>
+
+                <strong>
+                    جولات سريعة
+                </strong>
+
+                <span>
+                    كل جولة مختلفة
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<div class="modal" id="createModal">
+
+    <div class="modal-box">
+
+        <button class="close" onclick="closeModals()">×</button>
+
+        <div class="modal-icon">
+            ◈
+        </div>
+
+        <h2>
+            إنشاء غرفة
+        </h2>
+
+        <p>
+            اكتب اسمك وخلنا نبدأ.
+        </p>
+
+        <input
+            id="createName"
+            type="text"
+            maxlength="16"
+            placeholder="اسم اللاعب"
+        >
+
+        <button class="modal-btn" onclick="createRoom()">
+            إنشاء الغرفة
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="modal" id="joinModal">
+
+    <div class="modal-box">
+
+        <button class="close" onclick="closeModals()">×</button>
+
+        <div class="modal-icon">
+            ↗
+        </div>
+
+        <h2>
+            دخول غرفة
+        </h2>
+
+        <p>
+            أدخل كود الغرفة للانضمام.
+        </p>
+
+        <input
+            id="joinName"
+            type="text"
+            maxlength="16"
+            placeholder="اسم اللاعب"
+        >
+
+        <input
+            id="roomCode"
+            type="text"
+            maxlength="6"
+            inputmode="numeric"
+            placeholder="كود الغرفة"
+        >
+
+        <button class="modal-btn" onclick="joinRoom()">
+            دخول الغرفة
+        </button>
+
+    </div>
+
+</div>
+
+
+<div class="room-screen" id="roomScreen">
+
+    <div class="room-header">
+
+        <button class="back-btn" onclick="leaveRoom()">
+            ← خروج
+        </button>
+
+        <div class="room-title">
+
+            <span>
+                كود الغرفة
+            </span>
+
+            <strong id="displayCode">
+                ------
+            </strong>
+
+        </div>
+
     </div>
 
 
-    <script src="app.js"></script>
+    <div class="room-content">
+
+        <div class="room-intro">
+
+            <span class="eyebrow">
+                غرفة الانتظار
+            </span>
+
+            <h2>
+                اجمع فريقك<br>
+                <span>واستعد.</span>
+            </h2>
+
+            <p>
+                أرسل كود الغرفة لأصدقائك.
+            </p>
+
+        </div>
+
+
+        <div class="players-card">
+
+            <div class="players-head">
+
+                <strong>
+                    اللاعبون
+                </strong>
+
+                <span id="playerCount">
+                    1 / 8
+                </span>
+
+            </div>
+
+
+            <div class="players" id="playersList">
+
+                <div class="player-row">
+
+                    <div class="avatar">
+                        1
+                    </div>
+
+                    <div class="player-name">
+
+                        <strong id="myName">
+                            أنت
+                        </strong>
+
+                        <span>
+                            قائد الغرفة
+                        </span>
+
+                    </div>
+
+                    <div class="host">
+                        HOST
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <button class="start-btn" onclick="startGame()">
+                ابدأ الجولة
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="loading-screen" id="loadingScreen">
+
+    <div class="loading-symbol">
+        ◈
+    </div>
+
+    <div class="loading-title">
+        جاري تجهيز المطاردة
+    </div>
+
+    <div class="loading-bar">
+        <span id="loadingProgress"></span>
+    </div>
+
+</div>
+
+
+<div class="game-screen" id="gameScreen">
+
+    <div class="game-top">
+
+        <div class="game-logo">
+            ◈ المطاردة
+        </div>
+
+        <div class="round">
+            الجولة <b>01</b>
+        </div>
+
+        <div class="timer" id="timer">
+            02:00
+        </div>
+
+    </div>
+
+
+    <div class="game-map">
+
+        <div class="game-road r1"></div>
+        <div class="game-road r2"></div>
+        <div class="game-road r3"></div>
+
+        <div class="game-building gb1"></div>
+        <div class="game-building gb2"></div>
+        <div class="game-building gb3"></div>
+        <div class="game-building gb4"></div>
+
+        <div class="you-character">
+            <span>أنت</span>
+        </div>
+
+        <div class="bot-character">
+            <span>BOT</span>
+        </div>
+
+    </div>
+
+
+    <div class="game-bottom">
+
+        <div>
+            <strong id="gameModeTitle">
+                لعب فردي
+            </strong>
+
+            <span>
+                أكمل المهام واهرب
+            </span>
+        </div>
+
+        <button onclick="exitGame()">
+            خروج
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="app.js"></script>
 
 </body>
 </html>
